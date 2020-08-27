@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>じゃんけん</title>
+</head>
+<body>
+
+<header>
+  <h1 class="header_logo" ></h1>
+  <div class="score">
+  <div class="my">あなた<p id="myCount"></p></div>
+  <div class="pc">PC<p id="pcCount"></p></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ゲーム開始時 -->
+  <div id="start">
+    <p id="start_btn"></p>
+  </div>
+
+  <div id="main_body">
+    <div= class="my_hand">
+      <div id="gu_btn" ></div>
+      <div id="cho_btn"></div>
+      <div id="par_btn"></div>
+    </div=>
+    <div id="pc_hands">PCの手</div>
+    <div id="judgment">いざ勝負！</div>
+    <div id=result_btn>結果</div>
+  </div>
+
+    <!-- 勝敗結果を表示する -->
+    <div id="result">
+      <div class="result_text">
+        <div id="win">勝</div>
+        <div id="lose">負</div>
+        <div id="draw">分</div>
+      </div> 
+      <div id="win_rate">勝率</div> 
+      <div id="comment">コメント</div>
+      <div id="re_btn"></div>
+    </div>
+  
+</main>
+
+<footer>Copyright© 2020 Janken inc. All Rights Reserved.</footer>
+<script>
+//じゃんけん用のSCRIPTを書いてください
+
+// スタート時の挙動
+$("#main_body").hide();
+$("#result").hide();
+
+$("#start_btn").on("click",function(){
+  $("#start").hide();
+  $("#main_body").fadeIn();
+});
+
+// スタートに戻る時
+$("#re_btn").on("click",function(){
+  location.reload();
+});
+
+// カウントについて
+let [myCount,pcCount] = [0,0];
+
+// 勝敗について
+let win = 0;
+let lose = 0;
+let draw = 0;
+let total = win + lose + draw;
+
+// じゃんけん の挙動------------------ここからーーー
+// グーを選択した時の動き
+$("#gu_btn").on("click",function(){
+const num = Math.ceil( Math.random() * 3 ); 
+
+if(num==1){
+    $("#pc_hands").html('<img src="img/gu.png">');
+    $("#judgment").html('<img src="img/draw.png">');
+    draw += 1;
+    $("#draw").html(draw+"分");
+    total +=1;
+
+}
+if(num==2){
+  $("#pc_hands").html('<img src="img/choki.png">');
+  $("#judgment").html('<img src="img/win.png">');
+  win += 1;
+  $("#win").html(win+"勝");
+  myCount += 1;
+  $("#myCount").html(myCount);
+  total +=1;
+  
+}
+if(num==3){
+  $("#pc_hands").html('<img src="img/par.png">');
+  $("#judgment").html('<img src="img/lose.png">');
+  lose += 1;
+  $("#lose").html(lose+"敗");
+  pcCount += 1;
+  $("#pcCount").html(pcCount);
+  total +=1;
+}
+});
+
+
+// チョキを選択した時の動き
+$("#cho_btn").on("click",function(){
+const num = Math.ceil( Math.random() * 3 ); 
+
+if(num==1){
+  $("#pc_hands").html('<img src="img/gu.png">');
+  $("#judgment").html('<img src="img/lose.png">');
+  lose += 1;
+  $("#lose").html(lose+"敗");
+  pcCount += 1;
+  $("#pcCount").html(pcCount);
+  total +=1;
+}
+if(num==2){
+  $("#pc_hands").html('<img src="img/choki.png">');
+  $("#judgment").html('<img src="img/draw.png">');
+  draw += 1;
+  $("#draw").html(draw+"分");
+  total +=1;
+}
+if(num==3){
+  $("#pc_hands").html('<img src="img/par.png">');
+  $("#judgment").html('<img src="img/win.png">');
+  win += 1;
+  $("#win").html(win+"勝");
+  myCount += 1;
+  $("#myCount").html(myCount);
+  total +=1;
+}
+});
+    
+// パーを選択した時の動き
+$("#par_btn").on("click",function(){
+const num = Math.ceil( Math.random() * 3 ); 
+
+if(num==1){
+  $("#pc_hands").html('<img src="img/gu.png">');
+  $("#judgment").html('<img src="img/win.png">');
+  win += 1;
+  $("#win").html(win+"勝");
+  myCount += 1;
+  $("#myCount").html(myCount);
+  total +=1;
+}
+if(num==2){
+  $("#pc_hands").html('<img src="img/choki.png">');
+  $("#judgment").html('<img src="img/lose.png">');
+  lose += 1;
+  $("#lose").html(lose+"敗");
+  pcCount += 1;
+  $("#pcCount").html(pcCount);
+  total +=1;
+}
+if(num==3){
+  $("#pc_hands").html('<img src="img/par.png">');
+  $("#judgment").html('<img src="img/draw.png">');
+  draw += 1;
+  $("#draw").html(draw+"分");
+  total +=1;
+}
+});   
+
+// じゃんけん の挙動はここまでーーーーー
+    
+
+// 終了時の挙動（スコアを表示させる）
+$("#result_btn").on("click",function(){
+  $("#main_body").fadeOut();
+  $("#result").fadeIn();
+
+// 勝率を入れる---------
+  let win_rate = (win / total)*100 ;
+  let win_rate_roundUp = win_rate.toFixed(0);
+  $("#win_rate").html("勝率" + win_rate_roundUp + "%");
+
+  if(myCount > pcCount){
+  $("#comment").html("つまりあなたはPCよりもじゃんけんが強い")
+  }
+  if(myCount < pcCount){
+    $("#comment").html("つまりあなたはPCよりもじゃんけんが弱い")
+  }
+  if(myCount == pcCount){
+    $("#comment").html("つまりあなた自身がPCなのです")
+  }
+  
+});
+
+    
+
+</script>
+</body>
+</html>
